@@ -24,6 +24,7 @@ var Lightbox = React.createClass({
   propTypes: {
     activeProps:     PropTypes.object,
     renderHeader:    PropTypes.func,
+    renderFooter:    PropTypes.func,
     renderContent:   PropTypes.func,
     underlayColor:   PropTypes.string,
     backgroundColor: PropTypes.string,
@@ -74,6 +75,7 @@ var Lightbox = React.createClass({
       isOpen: this.state.isOpen,
       origin: this.state.origin,
       renderHeader: this.props.renderHeader,
+      renderFooter: this.props.renderFooter,
       swipeToDismiss: this.props.swipeToDismiss,
       springConfig: this.props.springConfig,
       backgroundColor: this.props.backgroundColor,

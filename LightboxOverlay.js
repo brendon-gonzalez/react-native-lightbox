@@ -40,6 +40,7 @@ var LightboxOverlay = React.createClass({
     backgroundColor: PropTypes.string,
     isOpen:          PropTypes.bool,
     renderHeader:    PropTypes.func,
+    renderFooter:    PropTypes.func,
     onOpen:          PropTypes.func,
     onClose:         PropTypes.func,
     swipeToDismiss:  PropTypes.bool,
@@ -154,6 +155,7 @@ var LightboxOverlay = React.createClass({
     var {
       isOpen,
       renderHeader,
+      renderFooter,
       swipeToDismiss,
       origin,
       backgroundColor,
@@ -200,6 +202,14 @@ var LightboxOverlay = React.createClass({
         </TouchableOpacity>
       )
     )}</Animated.View>);
+    var footer = (<Animated.View style={[styles.footer, lightboxOpacityStyle]}>{(renderFooter ?
+      renderFooter(this.close) :
+      (
+        <TouchableOpacity onPress={this.close}>
+          <Text style={styles.closeButton}>×</Text>
+        </TouchableOpacity>
+      )
+    )}</Animated.View>);
     var content = (
       <Animated.View style={[openStyle, dragStyle]} {...handlers}>
         {this.props.children}
@@ -211,6 +221,7 @@ var LightboxOverlay = React.createClass({
           {background}
           {content}
           {header}
+          {footer}
         </View>
       );
     }
@@ -219,6 +230,7 @@ var LightboxOverlay = React.createClass({
         {background}
         {content}
         {header}
+        {footer}
       </Modal>
     );
   }
@@ -242,6 +254,13 @@ var styles = StyleSheet.create({
   header: {
     position: 'absolute',
     top: 0,
+    left: 0,
+    width: WINDOW_WIDTH,
+    backgroundColor: 'transparent',
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
     left: 0,
     width: WINDOW_WIDTH,
     backgroundColor: 'transparent',
