@@ -112,7 +112,7 @@ var Lightbox = React.createClass({
           });
         }
         this.setTimeout(() => {
-          this.state.layoutOpacity.setValue(0);
+          this.state.layoutOpacity.setValue(1);
         });
       });
     });

@@ -57,6 +57,7 @@ var LightboxOverlay = React.createClass({
       },
       pan: new Animated.Value(0),
       openVal: new Animated.Value(0),
+      contentVal: new Animated.Value(1)
     };
   },
 
@@ -122,11 +123,16 @@ var LightboxOverlay = React.createClass({
         opacity: 1,
       }
     });
-
-    Animated.spring(
-      this.state.openVal,
-      { toValue: 1, ...this.props.springConfig }
-    ).start(() => this.setState({ isAnimating: false }));
+    Animated.parallel([
+      Animated.spring(
+        this.state.openVal,
+        { toValue: 1, ...this.props.springConfig }
+      ),
+      Animated.timing(
+        this.state.contentVal,
+        { toValue: 1 }
+      )
+    ]).start(() => this.setState({ isAnimating: false }));
   },
 
   close: function() {
@@ -134,15 +140,21 @@ var LightboxOverlay = React.createClass({
     this.setState({
       isAnimating: true,
     });
-    Animated.spring(
-      this.state.openVal,
-      { toValue: 0, ...this.props.springConfig }
-    ).start(() => {
+    Animated.parallel([
+      Animated.spring(
+        this.state.openVal,
+        { toValue: 0, ...this.props.springConfig }
+      ),
+      Animated.timing(
+        this.state.contentVal,
+        { toValue: 0, delay: 350, duraction: 50 }
+      )
+    ]).start(() => {
       this.setState({
         isAnimating: false,
       });
       this.props.onClose();
-    });
+    })
   },
 
   componentWillReceiveProps: function(props) {
@@ -211,7 +223,13 @@ var LightboxOverlay = React.createClass({
       )
     )}</Animated.View>);
     var content = (
-      <Animated.View style={[openStyle, dragStyle]} {...handlers}>
+      <Animated.View style={[
+        openStyle,
+        dragStyle,
+        {
+          opacity: this.state.contentVal
+        }
+      ]} {...handlers}>
         {this.props.children}
       </Animated.View>
     );
